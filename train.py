@@ -17,7 +17,7 @@ parser.add_argument('--learning_rate_g', type = float,
 parser.add_argument('--learning_rate_d', type = float, 
 	default = 1e-4, help = 'learning rate for discriminator')
 parser.add_argument('--n_epoch', type = int, 
-	default = 25, help = 'max number of epoch')
+	default = 50, help = 'max number of epoch')
 parser.add_argument('--n_update', type = int, 
 	default = 50, help = 'max number of iterations to validate model')
 parser.add_argument('--batch_size', type = int, 
