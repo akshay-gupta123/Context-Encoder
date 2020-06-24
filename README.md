@@ -108,8 +108,10 @@ Lambda_adv and Lamba_rec are hyperparameters to decide weightage to each loss.
 ![Discrminator loss](./assets/dis_loss.png)
 
 **Image Generated after 25 epochs**
+
 ![Result Image](./assets/image.png)
 
+First row is of Real images , second represent masked image and last one represent generates image
 
 
 

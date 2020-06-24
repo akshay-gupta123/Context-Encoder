@@ -17,7 +17,9 @@ parser.add_argument('--learning_rate_g', type = float,
 parser.add_argument('--learning_rate_d', type = float, 
 	default = 1e-4, help = 'learning rate for discriminator')
 parser.add_argument('--n_epoch', type = int, 
-	default = 20, help = 'max # of epoch')
+	default = 25, help = 'max number of epoch')
+parser.add_argument('--n_update', type = int, 
+	default = 50, help = 'max number of iterations to validate model')
 parser.add_argument('--batch_size', type = int, 
 	default = 64, help = '# of batch size')
 parser.add_argument('--num_img', type = int, 
@@ -71,7 +73,7 @@ def train(args):
 				tf.summary.scalar("Pixel wise loss",g_loss2,step=cnt)
 				tf.summary.scalar("Adverserial loss",g_loss1,step=cnt)
 
-			if cnt%50==0:
+			if cnt%args.n_update==0:
 				print('>%d, %d , g1=%0.3f, g2=%0.3f, d1=%.3f, d2=%.3f' %
 				(epoch+1, cnt, g_loss1,g_loss2, d_loss_real, d_loss_fake))
 				
