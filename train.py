@@ -1,5 +1,5 @@
 from model import define_generator,define_discriminator,define_gan
-from utils import sample_images,mask_randomly,adverserial_loss
+from utils import sample_images,mask_randomly
 from dataloader import *
 
 import argparse
@@ -63,7 +63,7 @@ def train(args):
 			g_loss2 = args.gen.train_on_batch(masked_imgs,masked_parts)
 			g_loss = g_loss1 + g_loss2
 			
-   			with train_summary_writer.as_default():
+			with train_summary_writer.as_default():
 				tf.summary.scalar("Generator loss",g_loss,step=cnt)
 				tf.summary.scalar("Discriminator loss",d_loss,step=cnt)
 				tf.summary.scalar("Real Discriminator loss",d_loss_real,step=cnt)
@@ -75,19 +75,17 @@ def train(args):
 				print('>%d, %d , g1=%0.3f, g2=%0.3f, d1=%.3f, d2=%.3f' %
 				(epoch+1, cnt, g_loss1,g_loss2, d_loss_real, d_loss_fake))
 				
-				idx = np.random.randint(0, args.batch_size, 6)
-				imgs = batch[idx]
-				sample_images(args, cnt, imgs)
+				sample_images(args, cnt, args.valid_ds)
 			
 if __name__ == '__main__':
 
 	args = parser.parse_args()
-	args.ds = get_dataset(args)
+	args.ds,args.valid_ds = get_dataset(args)
 
 	# Initialize Networks
-	args.gen = define_generator(inshape=(args.data_shape))
+	args.gen = define_generator(in_shape=(args.data_shape))
 	args.dis = define_discriminator(in_shape=(args.mask_height,args.mask_width,3))
-	args.gan = define_gan(args.gen.args.dis) 
+	args.gan = define_gan(args.gen,args.dis) 
  
 	# Initialize Optimizer
 	args.gen_opt = tf.keras.optimizers.Adam(args.learning_rate_g)
@@ -96,7 +94,7 @@ if __name__ == '__main__':
 	# Customized adversarial function
 	def adverserial_loss(y_t,y_p):
 
-		adv_loss = tf.keras.losses.binary_crossentropy(from_logits=True)
+		adv_loss = tf.keras.losses.BinaryCrossentropy(from_logits=True)
 		loss = adv_loss(y_t,y_p)
 		return args.lambda_adv*loss
 

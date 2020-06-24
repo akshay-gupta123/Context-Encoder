@@ -24,7 +24,7 @@ def mask_randomly(args,imgs):
 def sample_images(args,count, imgs):
         r, c = 3, args.num_img
 
-        masked_imgs, missing_parts, (y1, y2, x1, x2) = mask_randomly(imgs)
+        masked_imgs, missing_parts, (y1, y2, x1, x2) = mask_randomly(args,imgs)
         gen_missing = args.gen.predict(masked_imgs)
 
         imgs = 0.5 * imgs + 0.5
